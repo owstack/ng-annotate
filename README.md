@@ -1,12 +1,5 @@
-# DEPRECATION NOTICE - SO LONG AND THANKS FOR ALL THE BITS
-**ng-annotate is not maintained any longer.**
-
-Please check out its successor instead: [babel-plugin-angularjs-annotate](https://github.com/schmod/babel-plugin-angularjs-annotate)
-
-**Please don't open any issues or pull requests on ng-annotate. No new releaseses will be made.**
-
-Feel free to fork the repo and publish your modified version if you want to. More info about the deprecation can be found in [Issue #245: The future of ng-annotate](https://github.com/olov/ng-annotate/issues/245).
-
+This repo is maintained to support the [OWS project](https://github.com/owstack). The [ows-release](https://github.com/owstack/ng-annotate/tree/ows-release) branch
+adds a module namespace annotation feature useful when used with [angular-namespacer](https://github.com/callmehiphop/angular-namespacer).
 
 # ng-annotate [![Build Status](https://travis-ci.org/olov/ng-annotate.svg?branch=master)](https://travis-ci.org/olov/ng-annotate)
 ng-annotate adds and removes AngularJS dependency injection annotations.
