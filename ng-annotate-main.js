@@ -544,6 +544,39 @@ function removeArray(array, fragments) {
     });
 }
 
+function namespaceArray(ctx, functionExpression) {
+    function getNamespaceParamName(ctx, identifierNode) {
+        const comments = ctx.comments;
+        for (let i = 0; i < comments.length; i++) {
+            const comment = comments[i];
+            const match = comment.value.match(/(?:^|\s*)@(?:namespace|ns)\s*([^\s]*)/);
+            const namespace = (match && match[1] ? match[1] : null);
+            if (!namespace || namespace.length == 0) {
+                continue;
+            }
+
+            const commentNode = ctx.lut.findNodeFromPos(comment.range[1]);
+            if (!commentNode) {
+                continue;
+            }
+
+            // Namespace comment annotation must be at the identifiers node location.
+            if (commentNode.start == identifierNode.start &&
+                commentNode.end == identifierNode.end) {
+                return namespace + ctx.nsSeparator + identifierNode.name;
+            }
+        }
+        return identifierNode.name;
+    }
+
+    // Update each function param identifer with the namespace.
+    for (let i = 0; i < functionExpression.params.length; i++) {
+        if (functionExpression.params[i].type == 'Identifier') {
+            functionExpression.params[i].name = getNamespaceParamName(ctx, functionExpression.params[i]);
+        }
+    }
+}
+
 function renameProviderDeclarationSite(ctx, literalNode, fragments) {
     fragments.push({
         start: literalNode.range[0] + 1,
@@ -604,6 +637,7 @@ function judgeSuspects(ctx) {
         } else if (mode === "remove" && isAnnotatedArray(target)) {
             removeArray(target, fragments);
         } else if (is.someof(mode, ["add", "rebuild"]) && isFunctionExpressionWithArgs(target)) {
+            namespaceArray(ctx, target);
             insertArray(ctx, target, fragments, quot);
         } else if (isGenericProviderName(target)) {
             renameProviderDeclarationSite(ctx, target, fragments);
@@ -1049,6 +1083,7 @@ module.exports = function ngAnnotate(src, options) {
         return {src: src};
     }
 
+    const nsSeparator = options.namespace_separator || '.';
     const quot = options.single_quotes ? "'" : '"';
     const re = (options.regexp ? new RegExp(options.regexp) : /^[a-zA-Z0-9_\$\.\s]+$/);
     const rename = new stringmap();
@@ -1124,6 +1159,7 @@ module.exports = function ngAnnotate(src, options) {
 
     const ctx = {
         mode: mode,
+        nsSeparator: nsSeparator,
         quot: quot,
         src: src,
         srcForRange: function(range) {

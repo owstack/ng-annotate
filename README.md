@@ -84,6 +84,18 @@ are used for the opposite purpose, suppressing an annotation that ng-annotate ad
 incorrectly (a "false positive"). They are called `/*@ngNoInject*/`, `ngNoInject(..)`
 and `"ngNoInject"` and do exactly what you think they do.
 
+## Module namespace support
+You can add comment annotations to your function parameters to specify that the output
+annotation should be pre-pended with a module identifier (aka. the namespace).
+For example, 
+
+`angular.module('myMod1').factory('foo', function ( /* @namespace myMod2 */ bar) { ... }`
+
+results in
+
+`angular.module('myMod1').factory('foo', ['myMod2.bar', function (/* @namespace myMod2 */ bar) { ... }`
+
+Use this feature in conjunction with [angular-namespacer](https://github.com/callmehiphop/angular-namespacer).
 
 ## ES6 and TypeScript support
 ng-annotate supports ES5 as input so run it with the output from Babel, Traceur,

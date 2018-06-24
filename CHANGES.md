@@ -1,3 +1,6 @@
+## ows-release 2018-24-06
+ * Added module namespace annotation for use with angular-namespacer
+
 ## v1.2.2 2017-06-01
  * so long and thanks for all the bits
 

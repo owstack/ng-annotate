@@ -17,6 +17,8 @@ Use the `--sourceroot` option to set the sourceRoot property of the generated so
 
 Use the `--single_quotes` option to output `'$scope'` instead of `"$scope"`.
 
+Use the `--namespace_separator` option to change the default value (default is dot, `.`).
+
 Use the `--regexp` option to restrict matching further or to expand matching.
 See description further down.
 
